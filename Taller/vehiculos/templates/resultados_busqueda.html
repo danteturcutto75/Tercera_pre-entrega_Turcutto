@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Resultados de la Búsqueda</h2>
+{% if resultados %}
+<table class="table">
+    <thead>
+        <tr>
+            <th>Marca</th>
+            <th>Modelo</th>
+            <th>Año</th>
+            <th>Dominio</th>
+            <th>Fecha de Modificación</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for vehiculo in resultados %}
+        <tr>
+            <td>{{ vehiculo.marca }}</td>
+            <td>{{ vehiculo.modelo }}</td>
+            <td>{{ vehiculo.anio }}</td>
+            <td>{{ vehiculo.dominio }}</td>
+            <td>{{ vehiculo.fecha_modificacion }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>No se encontraron resultados para el dominio proporcionado.</p>
+{% endif %}
+<a href="{% url 'buscar_vehiculo' %}" class="btn btn-primary">Realizar otra búsqueda</a>
+{% endblock %}

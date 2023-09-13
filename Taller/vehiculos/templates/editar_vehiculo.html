@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card w-25 ml-auto mr-auto">
+    <div class="card-header bg-primary text-light p-0 text-center">
+      <h5 class="mt-2">Editar vehículo</h5>
+    </div>
+    <div class="card-body">
+      <form method="post">
+        {% csrf_token %}        
+        <select class="form-control mb-2" id="marca" name="marca">
+          <option value="" selected>Seleccione una marca</option>
+          {% for marca in marcas %}
+          <option value="{{ marca.id }}">{{ marca.nombre }}</option>
+          {% endfor %}
+        </select>
+        <select class="form-control mb-2" id="modelo" name="modelo">
+          <option value="" selected>Seleccione un modelo</option>
+          {% for modelo in modelos %}
+          <option value="{{ modelo.id }}">{{ modelo.nombre }}</option>
+          {% endfor %}
+        </select>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="anio">Año</span>
+          </div>
+          <input
+            type="text"
+            class="form-control"
+            aria-label="anio"
+            aria-describedby="anio"
+            name="anio"
+            value="{{form.anio.value}}"
+          />
+        </div>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="dominio">Dominio</span>
+          </div>
+          <input
+            type="text"
+            class="form-control"
+            aria-label="dominio"
+            aria-describedby="dominio"
+            name="dominio"
+            value="{{form.dominio.value}}"
+          />
+        </div>
+        <button class="btn btn-primary" type="submit">Guardar</button>
+      </form>
+    </div>
+  </div>
+  
+  <script>
+    
+    $(document).ready(function () {
+        $("#marca").val("{{form.marca.value}}");
+        
+        var marcaSelect = $("#marca");
+        var modeloSelect = $("#modelo");   
+        var marcaId = marcaSelect.val();
+        $.ajax({
+            url: "{% url 'listar_modelos' %}",
+            data: { marca_id: marcaId },
+            dataType: "json",
+            success: function (data) {
+            modeloSelect.empty();
+            $.each(data.modelos, function (index, modelo) {
+                modeloSelect.append(
+                    $("<option>", {
+                        value: modelo.id,
+                        text: modelo.nombre,
+                    })
+                );
+            });
+            $("#modelo").val("{{form.modelo.value}}");
+            },
+        });
+    });
+    
+  </script>
+{% endblock %}
