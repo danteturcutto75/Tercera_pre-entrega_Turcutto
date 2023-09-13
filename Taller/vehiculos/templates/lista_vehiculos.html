@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Lista de Vehículos</h2>
+
         <table class="table table-sm">
             <thead class="table-dark">
                 <tr>
@@ -11,21 +11,24 @@
                     <th>Año</th>
                     <th>Dominio</th>
                     <th>Fecha de Modificación</th>
-                    <th>Acciones</th>
+                    <th>Editar</th>
+                    <th>Eliminar</th>
                 </tr>
             </thead>
             <tbody>
                 {% for vehiculo in vehiculos %}
                 <tr>
                     <td>{{ vehiculo.id }}</td>
-                    <td class="font-weight-bold">{{ vehiculo.marca }}</td>
+                    <td >{{ vehiculo.marca }}</td>
                     <td>{{ vehiculo.modelo }}</td>
                     <td>{{ vehiculo.anio }}</td>
                     <td>{{ vehiculo.dominio }}</td>
                     <td>{{ vehiculo.fecha_modificacion }}</td>
                     <td>
-                        <a href="{% url 'editar_vehiculo' vehiculo.id %}" class="btn btn-warning">Editar</a>
-                        <a href="{% url 'eliminar_vehiculo' vehiculo.id %}" class="btn btn-danger">Eliminar</a>
+                        <a href="{% url 'editar_vehiculo' vehiculo.id %}" class="btn btn-sm btn-primary font-weight-bold">Editar</a>
+                    </td>
+                    <td>
+                        <a href="{% url 'eliminar_vehiculo' vehiculo.id %}" class="btn btn-sm btn-danger font-weight-bold">Eliminar</a>
                     </td>
                 </tr>
                 {% endfor %}

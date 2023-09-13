@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Marca, Modelo, Vehiculo
 from .forms import VehiculoForm, BusquedaForm 
 from django.http import JsonResponse
+from django.db.models import Q
 
 def agregar_vehiculo(request):
     
@@ -61,8 +62,13 @@ def buscar_vehiculo(request):
     if request.method == 'POST':
         form = BusquedaForm(request.POST)
         if form.is_valid():
-            dominio = form.cleaned_data['dominio']
-            resultados = Vehiculo.objects.filter(dominio=dominio)
+            busqueda = form.cleaned_data['busqueda']
+            resultados = Vehiculo.objects.filter(dominio=busqueda)
+            resultados = Vehiculo.objects.filter(
+                Q(dominio__icontains=busqueda) |  
+                Q(marca__nombre__icontains=busqueda) |  
+                Q(modelo__nombre__icontains=busqueda)
+            )
             return render(request, 'resultados_busqueda.html', {'resultados': resultados})
     else:
         form = BusquedaForm()

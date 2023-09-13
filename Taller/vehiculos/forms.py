@@ -8,4 +8,4 @@ class VehiculoForm(forms.ModelForm):
 
 
 class BusquedaForm(forms.Form):
-    dominio = forms.CharField(max_length=10)
+    busqueda = forms.CharField(max_length=10)
