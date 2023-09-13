@@ -75,5 +75,26 @@ def buscar_vehiculo(request):
     return render(request, 'buscar_vehiculo.html', {'form': form})
 
 def lista_vehiculos(request):
-    vehiculos = Vehiculo.objects.all()
-    return render(request, 'lista_vehiculos.html', {'vehiculos': vehiculos})
+    if request.method == 'POST':
+        vehiculos = Vehiculo.objects.all()
+        form = BusquedaForm(request.POST)
+        if form.is_valid():
+            busqueda = form.cleaned_data['busqueda']
+            if busqueda == "":
+                vehiculos = Vehiculo.objects.all()
+            else:
+                vehiculos = Vehiculo.objects.filter(
+                    Q(dominio__icontains=busqueda) |  
+                    Q(marca__nombre__icontains=busqueda) |  
+                    Q(modelo__nombre__icontains=busqueda)
+                )
+        else:
+            busqueda = ""
+            vehiculos = Vehiculo.objects.all()
+    else:
+        busqueda = ""
+        vehiculos = Vehiculo.objects.all()
+    return render(request, 'lista_vehiculos.html', {'vehiculos': vehiculos, "busqueda": busqueda}) 
+
+    """ vehiculos = Vehiculo.objects.all()
+    return render(request, 'lista_vehiculos.html', {'vehiculos': vehiculos}) """
